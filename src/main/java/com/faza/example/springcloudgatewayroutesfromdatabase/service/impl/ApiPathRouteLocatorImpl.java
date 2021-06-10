@@ -5,6 +5,7 @@ import com.faza.example.springcloudgatewayroutesfromdatabase.service.ApiRouteSer
 import lombok.AllArgsConstructor;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.BooleanSpec;
 import org.springframework.cloud.gateway.route.builder.Buildable;
 import org.springframework.cloud.gateway.route.builder.PredicateSpec;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -30,10 +31,11 @@ public class ApiPathRouteLocatorImpl implements RouteLocator {
   }
   
   private Buildable<Route> setPredicateSpec(ApiRoute apiRoute, PredicateSpec predicateSpec) {
-    predicateSpec.path(apiRoute.getPath());
+    BooleanSpec booleanSpec = predicateSpec.path(apiRoute.getPath());
     if (!StringUtils.isEmpty(apiRoute.getMethod())) {
-      predicateSpec.method(apiRoute.getMethod());
+      booleanSpec.and()
+          .method(apiRoute.getMethod());
     }
-    return predicateSpec.uri(apiRoute.getUri());
+    return booleanSpec.uri(apiRoute.getUri());
   }
 }
